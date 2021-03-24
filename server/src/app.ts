@@ -1,7 +1,10 @@
-import express, { Application, Request, Response } from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import express, { Application } from 'express';
+import { schema } from './graphql';
 
 const app: Application = express();
+const server = new ApolloServer({ schema });
 
-app.get('/', (req: Request, res: Response) => res.send('NodeJS Server'));
+server.applyMiddleware({ app, path: '/api' });
 
 export { app };
