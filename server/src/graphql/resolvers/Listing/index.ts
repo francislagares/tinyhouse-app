@@ -6,7 +6,7 @@ export const listingResolvers: IResolvers = {
   Query: {
     listings: async (
       _root: undefined,
-      _args: {},
+      _args: Record<string, never>,
       { db }: { db: Database },
     ): Promise<Listing[]> => {
       return await db.listings.find({}).toArray();

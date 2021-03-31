@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { server } from '../../lib/api';
+import React from 'react';
+import { server, useQuery } from '../../lib/api';
 import {
   DeleteListingData,
   DeleteListingVariables,
   ListingsData,
-  Listing,
 } from './types';
 
 const LISTINGS = `
@@ -32,12 +31,20 @@ const DELETE_LISTING = `
 `;
 
 const Listings = (): JSX.Element => {
-  const [listings, setListings] = useState<Listing[] | null>(null);
+  const { data, loading, error, refetch } = useQuery<ListingsData>(LISTINGS);
 
-  const fetchListings = async () => {
-    const { data } = await server.fetch<ListingsData>({ query: LISTINGS });
-    setListings(data.listings);
+  const deleteListing = async (id: string) => {
+    await server.fetch<DeleteListingData, DeleteListingVariables>({
+      query: DELETE_LISTING,
+      variables: {
+        id,
+      },
+    });
+
+    refetch();
   };
+
+  const listings = data ? data.listings : null;
 
   const listingList = listings ? (
     <ul>
@@ -54,21 +61,17 @@ const Listings = (): JSX.Element => {
     </ul>
   ) : null;
 
-  const deleteListing = async (id: string) => {
-    await server.fetch<DeleteListingData, DeleteListingVariables>({
-      query: DELETE_LISTING,
-      variables: {
-        id,
-      },
-    });
-    fetchListings();
-  };
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
 
+  if (error) {
+    return <h2>Uh oh! Something went wrong - please try again later :(</h2>;
+  }
   return (
     <>
       <h2>Tinyhouse Listings</h2>
       {listingList}
-      <button onClick={fetchListings}>Query Listings</button>
     </>
   );
 };
