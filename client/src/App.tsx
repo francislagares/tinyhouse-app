@@ -1,6 +1,6 @@
 import React from 'react';
-import './App.css';
 import Listings from './sections/Listings/Listings';
+import './App.css';
 
 const App = (): JSX.Element => {
   return (
