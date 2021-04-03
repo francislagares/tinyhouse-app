@@ -5,7 +5,7 @@ import './App.css';
 const App = (): JSX.Element => {
   return (
     <div className='app'>
-      <Listings />
+      <Listings title='TinyHouse Listings' />
     </div>
   );
 };
