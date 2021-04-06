@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import { MongoClient } from 'mongodb';
-import { Database } from '../lib/types';
+import { Database, Booking, Listing, User } from '../lib/types';
 
 dotenv.config();
 
@@ -15,6 +15,8 @@ export const connectDB = async (): Promise<Database> => {
   const db = client.db('tinyhouse');
 
   return {
-    listings: db.collection('listings'),
+    bookings: db.collection<Booking>('bookings'),
+    listings: db.collection<Listing>('listings'),
+    users: db.collection<User>('users'),
   };
 };
