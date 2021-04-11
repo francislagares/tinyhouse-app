@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
-import { Affix, Layout } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import { Affix, Layout, Spin } from 'antd';
 import { Switch, Route } from 'react-router-dom';
+import { AppHeaderSkeleton, ErrorBanner } from './lib/components';
+import { LOG_IN } from './lib/graphql/mutations';
+import {
+  LogIn as LogInData,
+  LogInVariables,
+} from './lib/graphql/mutations/LogIn/__generated__/LogIn';
 import { Viewer } from './lib/types';
 import {
   AppHeader,
@@ -25,7 +32,39 @@ const initialViewer: Viewer = {
 
 const App = (): JSX.Element => {
   const [viewer, setViewer] = useState<Viewer>(initialViewer);
+  const [logIn, { error }] = useMutation<LogInData, LogInVariables>(LOG_IN, {
+    onCompleted: data => {
+      if (data && data.logIn) {
+        setViewer(data.logIn);
+      }
+    },
+  });
 
+  const logInRef = useRef(logIn);
+
+  useEffect(() => {
+    logInRef.current();
+  }, []);
+
+  if (!viewer.didRequest && !error) {
+    return (
+      <Layout className='app-skeleton'>
+        <AppHeaderSkeleton />
+        <div className='app-skeleton__spin-section'>
+          <Spin size='large' tip='Launching Tinyhouse' />
+        </div>
+      </Layout>
+    );
+  }
+
+  const LogInErrorBannerElement = error ? (
+    <ErrorBanner
+      description={`We weren't able to verify if you were logged. Please try again later!`}
+    />
+  ) : null;
+  {
+    LogInErrorBannerElement;
+  }
   return (
     <Layout id='app'>
       <Affix offsetTop={0} className='app_affix-header'>
