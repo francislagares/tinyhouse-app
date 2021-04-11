@@ -36,6 +36,12 @@ const App = (): JSX.Element => {
     onCompleted: data => {
       if (data && data.logIn) {
         setViewer(data.logIn);
+
+        if (data.logIn.token) {
+          sessionStorage.setItem('token', data.logIn.token);
+        } else {
+          sessionStorage.removeItem('token');
+        }
       }
     },
   });
