@@ -43,7 +43,7 @@ export const MenuItems = ({ viewer, setViewer }: Props): JSX.Element => {
   const subMenuLogin = viewer.id ? (
     <SubMenu title={<Avatar src={viewer.avatar} />}>
       <Item key='/user'>
-        <Link to='/user/${viewer.id}'>
+        <Link to={`/user/${viewer.id}`}>
           <UserOutlined />
           Profile
         </Link>
