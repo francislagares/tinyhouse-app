@@ -4,7 +4,7 @@ import { Card, Typography } from 'antd';
 
 interface Props {
   listing: {
-    id: string;
+    id?: string;
     title: string;
     image: string;
     address: string;
