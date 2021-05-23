@@ -14,6 +14,9 @@
     "a11y/no-obsolete-element": true,
     "a11y/no-obsolete-attribute": true,
     "a11y/content-property-no-static-value": true,
+    "value-keyword-case": ["lower", {
+      "ignoreProperties": ["color"]
+    }],
     "order/properties-order": [
       "top",
       "bottom",
